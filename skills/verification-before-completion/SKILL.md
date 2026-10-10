@@ -32,8 +32,25 @@ BEFORE claiming any status or expressing satisfaction:
    - If YES: State claim WITH evidence
 5. ONLY THEN: Make the claim
 
-Skip any step = lying, not verifying
+Skip any step = an unsubstantiated claim, not verification
 ```
+
+## Build the Verification Matrix
+
+Read local instructions, manifests, and CI configuration. Select checks by the
+claim and changed surface rather than running `test` alone by habit:
+
+- behavior: focused regression plus the broadest relevant test suite;
+- static correctness: lint and typecheck;
+- integration/packaging: production build;
+- data model: schema validation, generated client consistency, and migration
+  checks that do not endanger shared data;
+- repository-specific invariants: documented scripts such as contract,
+  capability, formatting, or generated-file checks.
+
+For multi-package changes, verify every affected package and the contract
+between them. Never claim checks that require unavailable credentials, services,
+or platforms; list them explicitly as unverified.
 
 ## Common Failures
 

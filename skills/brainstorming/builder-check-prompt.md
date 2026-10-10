@@ -1,6 +1,6 @@
 # Builder Check Prompt
 
-Dispatch a fresh general-purpose subagent with this prompt once the
+Give this prompt to a fresh independent reviewer, when available, once the
 written design exists. Fill in the domain and the document path.
 
 ```

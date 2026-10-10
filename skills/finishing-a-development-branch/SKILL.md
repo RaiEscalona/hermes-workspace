@@ -13,12 +13,16 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 ## Step 1: Verify Tests
 
-Run the project's full test suite (`npm test` / `cargo test` / `pytest` / `go test ./...`).
+Read repository instructions and run the full required verification matrix for
+the changed scope. This often includes tests, lint, typecheck, build, database
+or migration checks, and generated-artifact consistency. Use package scripts
+and the repository's documented commands rather than guessing from language.
 
-**If tests fail**, report the failures and stop — the menu comes after a green suite:
+**If a required check fails**, report the failures and stop — the menu comes
+after a green verification run:
 
 ```
-Tests failing (<N> failures). Must fix before completing:
+Verification failing (<N> failures). Must fix before completing:
 
 [Show failures]
 ```

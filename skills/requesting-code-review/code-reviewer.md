@@ -1,11 +1,12 @@
 # Code Reviewer Prompt Template
 
-Use this template when dispatching a code reviewer subagent.
+Use this template for an independent reviewer or, when one is unavailable, a
+fresh self-review pass.
 
 **Purpose:** Review completed work against requirements and code quality standards before it cascades into more work.
 
 ```
-Subagent (general-purpose):
+Reviewer:
   description: "Review code changes"
   prompt: |
     You are a Senior Code Reviewer with expertise in software architecture,

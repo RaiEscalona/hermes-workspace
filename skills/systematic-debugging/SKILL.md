@@ -7,17 +7,16 @@ description: Use when encountering any bug, test failure, or unexpected behavior
 
 ## Overview
 
-**Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
+**Core principle:** Gather enough evidence to explain the failure before choosing a fix.
 
-**Violating the letter of this process is violating the spirit of debugging.**
-
-## The Iron Law
+## Evidence Gate
 
 ```
-NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
+NO FIX WITHOUT EVIDENCE FOR THE CAUSE FIRST
 ```
 
-If you haven't completed Phase 1, you cannot propose fixes.
+Before proposing a fix, be able to state the observed failure, the evidence
+that locates its cause, and what result would falsify the hypothesis.
 
 ## When to Use
 
@@ -43,7 +42,9 @@ Use for ANY technical issue:
 
 ## The Four Phases
 
-You MUST complete each phase before proceeding to the next.
+Use the phases in order, but keep the depth proportional to the incident. A
+clear local failure may need only an error trace and one reproduction; a
+distributed or security-sensitive failure needs stronger boundary evidence.
 
 ### Phase 1: Root Cause Investigation
 
@@ -71,7 +72,10 @@ You MUST complete each phase before proceeding to the next.
 
    **WHEN system has multiple components (CI → build → signing, API → service → database):**
 
-   **BEFORE proposing fixes, add diagnostic instrumentation:**
+   **BEFORE proposing fixes, prefer existing logs, traces, and read-only
+   inspection.** Add narrowly scoped diagnostic instrumentation only when those
+   sources cannot locate the failing boundary and the task authorizes code
+   changes. Never log secrets, tokens, credentials, or sensitive payloads.
    ```
    For EACH component boundary:
      - Log what data enters component
@@ -173,8 +177,9 @@ You MUST complete each phase before proceeding to the next.
    - Simplest possible reproduction
    - Automated test if possible
    - One-off test script if no framework
-   - MUST have before fixing
-   - Use the `superpowers:test-driven-development` skill for writing proper failing tests
+   - Prefer an automated regression test; use a focused reproduction script or
+     documented manual check when automation is impractical
+   - Use the `test-driven-development` skill when adding the regression test
 
 2. **Implement Single Fix**
    - Address the root cause identified
@@ -186,16 +191,16 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
-   - Use the `superpowers:verification-before-completion` skill before claiming success
+   - Use the `verification-before-completion` skill before claiming success
 
 4. **If Fix Doesn't Work**
    - STOP
-   - Count: How many fixes have you tried?
-   - If < 3: Return to Phase 1, re-analyze with new information
-   - **If ≥ 3: STOP and question the architecture (step 5 below)**
-   - DON'T attempt Fix #4 without architectural discussion
+   - Return to Phase 1 and re-analyze with the new information
+   - If repeated attempts fail, return to the evidence and reassess assumptions
+   - Escalate for architectural discussion when the evidence points to systemic
+     coupling or when the next change would materially broaden scope
 
-5. **If 3+ Fixes Failed: Question Architecture**
+5. **If Repeated Fixes Reveal Systemic Problems: Question Architecture**
 
    **Pattern indicating architectural problem:**
    - Each fix reveals new shared state/coupling/problem in different place
@@ -223,12 +228,13 @@ If you catch yourself thinking:
 - "Pattern says X but I'll adapt it differently"
 - "Here are the main problems: [lists fixes without investigation]"
 - Proposing solutions before tracing data flow
-- **"One more fix attempt" (when already tried 2+)**
+- Repeating fix attempts without new evidence
 - **Each fix reveals new problem in different place**
 
 **ALL of these mean: STOP. Return to Phase 1.**
 
-**If 3+ fixes failed:** Question the architecture (see Phase 4.5)
+**If repeated fixes reveal the same coupling or move the failure elsewhere:**
+Question the architecture (see Phase 4.5).
 
 ## your human partner's Signals You're Doing It Wrong
 
@@ -252,7 +258,7 @@ If you catch yourself thinking:
 | "Multiple fixes at once saves time" | Can't isolate what worked. Causes new bugs. |
 | "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely. |
 | "I see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
-| "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question pattern, don't fix again. |
+| "One more fix attempt" without new evidence | Return to the investigation; repeated evidence of systemic coupling may require an architectural discussion. |
 
 ## Quick Reference
 
@@ -272,7 +278,8 @@ If systematic investigation reveals issue is truly environmental, timing-depende
 3. Implement appropriate handling (retry, timeout, error message)
 4. Add monitoring/logging for future investigation
 
-**But:** 95% of "no root cause" cases are incomplete investigation.
+Be explicit about which evidence is missing and what would make the conclusion
+more certain.
 
 ## Supporting Techniques
 

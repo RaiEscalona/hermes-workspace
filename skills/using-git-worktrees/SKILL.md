@@ -83,7 +83,8 @@ Follow this priority order. Explicit user preference always beats observed files
 git check-ignore -q .worktrees 2>/dev/null || git check-ignore -q worktrees 2>/dev/null
 ```
 
-**If NOT ignored:** Add to .gitignore, commit the change, then proceed.
+**If NOT ignored:** Add the selected directory to `.gitignore`. Do not create a
+commit unless the user or repository workflow asked for one.
 
 **Why critical:** Prevents accidentally committing worktree contents to repository.
 
@@ -101,18 +102,20 @@ cd "$path"
 
 ## Step 2: Project Setup
 
-Auto-detect and run appropriate setup:
+Read repository instructions and detect the package manager from its lockfile.
+Use the repository's documented setup command; examples:
 
 ```bash
-# Node.js
-if [ -f package.json ]; then npm install; fi
+# Node.js (choose the matching lockfile/package manager)
+if [ -f package-lock.json ]; then npm ci; fi
+if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; fi
+if [ -f yarn.lock ]; then yarn install --frozen-lockfile; fi
+if [ -f bun.lock ] || [ -f bun.lockb ]; then bun install --frozen-lockfile; fi
 
 # Rust
 if [ -f Cargo.toml ]; then cargo build; fi
 
-# Python
-if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-if [ -f pyproject.toml ]; then poetry install; fi
+# Python: follow uv/Poetry/pip lockfiles and project documentation
 
 # Go
 if [ -f go.mod ]; then go mod download; fi
@@ -120,10 +123,12 @@ if [ -f go.mod ]; then go mod download; fi
 
 ## Step 3: Verify Clean Baseline
 
-Run tests to ensure workspace starts clean:
+Run the repository's baseline verification, not a guessed universal command.
+This normally includes tests and may include lint, typecheck, build, migrations,
+or generated-artifact checks:
 
 ```bash
-# Use project-appropriate command
+# Examples only; prefer package scripts and repository documentation
 npm test / cargo test / pytest / go test ./...
 ```
 
@@ -151,7 +156,7 @@ Ready to implement <feature-name>
 | `worktrees/` exists | Use it (verify ignored) |
 | Both exist | Use `.worktrees/` |
 | Neither exists | Check instruction file, then default `.worktrees/` |
-| Directory not ignored | Add to .gitignore + commit |
+| Directory not ignored | Add to `.gitignore`; commit only when requested |
 | Permission error on create | Sandbox fallback, work in place |
 | Tests fail during baseline | Report failures + ask |
 | No package.json/Cargo.toml | Skip dependency install |

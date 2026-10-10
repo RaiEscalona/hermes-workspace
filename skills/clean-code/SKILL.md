@@ -1,8 +1,8 @@
 ---
 name: clean-code
 description: Review and improve code quality, eliminate unnecessary duplication, and apply maintainable design principles.
-version: 1.0.0
 metadata:
+  version: 1.0.0
   hermes:
     category: development
     tags: [clean-code, refactoring, dry, solid]
@@ -31,14 +31,17 @@ refactoring modules, or identifying duplicated logic.
 
 ## Workflow
 
-1. Understand the requirement.
+1. Read repository instructions, manifests, and the affected code before choosing a pattern.
 2. Search for existing implementations and reusable code.
-3. Identify affected modules and dependencies.
-4. Propose the smallest maintainable change.
-5. Implement the solution.
-6. Run relevant linting, type checks and tests.
-7. Review the diff for duplication and regressions.
-8. Summarize changes and remaining risks.
+3. Identify affected modules, contracts, data boundaries, and dependencies.
+4. Make the smallest maintainable change that satisfies the request.
+5. Run the repository's relevant tests, lint, type checks, builds, and domain-specific checks.
+6. Review the diff for duplication, unintended API changes, and regressions.
+7. Summarize changes, verification evidence, and remaining risks.
+
+Do not introduce a new abstraction merely to satisfy DRY. Duplication is often
+cheaper than a shared abstraction when the concepts only look similar or are
+likely to evolve independently.
 
 ## Verification
 

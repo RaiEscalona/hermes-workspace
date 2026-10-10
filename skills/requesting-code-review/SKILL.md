@@ -5,16 +5,19 @@ description: Use when completing tasks, implementing major features, or before m
 
 # Requesting Code Review
 
-Dispatch a code reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history.
+Use an independent code-review pass to catch issues before they cascade. When
+delegation is available and authorized, give a reviewer precisely crafted
+context rather than the whole session. Otherwise, perform the same structured
+review yourself in a fresh pass.
 
 **Core principle:** Review early, review often.
 
 ## When to Request Review
 
-**Mandatory:**
-- After each task in subagent-driven development
-- After completing major feature
-- Before merge to main
+**Strongly recommended:**
+- After each independently reviewable task in delegated development
+- After completing a major or security-sensitive feature
+- Before merge to the primary branch
 
 **Optional but valuable:**
 - When stuck (fresh perspective)
@@ -23,15 +26,20 @@ Dispatch a code reviewer subagent to catch issues before they cascade. The revie
 
 ## How to Request
 
-**1. Get git SHAs:**
+**1. Define the review range:**
 ```bash
 BASE_SHA=$(git rev-parse HEAD~1)  # or: git merge-base origin/main HEAD
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 
-**2. Dispatch code reviewer subagent:**
+If work is uncommitted, review `git diff` and `git diff --cached` instead of
+inventing a commit range.
 
-Dispatch a `general-purpose` subagent, filling the template at [code-reviewer.md](code-reviewer.md)
+**2. Run the review:**
+
+Give an independent reviewer the template at [code-reviewer.md](code-reviewer.md).
+If no reviewer is available, use the template for a self-review and state that
+the review was not independent.
 
 **Placeholders:**
 - `{DESCRIPTION}` - Brief summary of what you built
@@ -57,7 +65,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 [Dispatch code reviewer subagent]
   DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
+  PLAN_OR_REQUIREMENTS: Task 2 from docs/plans/deployment-plan.md
   BASE_SHA: a7981ec
   HEAD_SHA: 3df7661
 
@@ -76,13 +84,13 @@ You: [Fix progress indicators]
 
 | Excuse | Reality |
 |--------|---------|
-| "I'll just review the diff myself instead of dispatching a reviewer" | You're the coordinator — reviewing the diff inline burns the context window you need to keep driving the work. Dispatch a reviewer subagent: the diff and the evaluation live in its context, and only the findings come back to you. |
+| "No reviewer is available, so review is impossible" | Run the template yourself and disclose that it was a self-review. |
 | "The reviewer needs my whole session history to understand the change" | Hand it precisely crafted context, never your session's history. That keeps the reviewer on the work product, not your thought process. |
 
 ## Red Flags
 
 **Never:**
-- Skip review because "it's simple"
+- Skip a warranted review merely because the diff is short
 - Ignore Critical issues
 - Proceed with unfixed Important issues
 - Argue with valid technical feedback

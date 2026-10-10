@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, modifying behavior, or planning anything new, in software or out of it (a talk, a business, a renovation)."
+description: Clarify intent and shape an ambiguous product, feature, design, or other creative project before implementation. Skip for well-specified changes and routine maintenance.
 ---
 
 # Brainstorming
@@ -23,20 +23,15 @@ why?
   blue"). This is a quick, clear task. Do it, and say what you did.
 - **Something non-trivial is missing.** Start the conversation.
 
-## Your First Message
+## Your First Message for Ambiguous Work
 
-Your first message is two things, in this order:
+Ask one open question that gets them describing. Ask about a real moment
+or a concrete picture: "What's the moment you find yourself wishing
+this existed?" or "Tell me about the people who'll be in the room."
 
-1. One line letting them know that if they'd rather skip the questions and
-   have you just start, they can say so. If they take you up on it, this
-   skill is done: state any significant how-it-gets-made choice
-   (platform, language, medium) in one plain line, then do what they
-   asked through the normal workflow.
-2. One open question that gets them describing. Ask about a real moment
-   or a concrete picture: "What's the moment you find yourself wishing
-   this existed?" or "Tell me about the people who'll be in the room."
-
-That's the whole message.
+If the request already supplies the goal, constraints, and acceptance criteria,
+do not force a discovery conversation. State any consequential assumption and
+continue through the normal workflow.
 
 ## The Conversation
 
@@ -135,7 +130,7 @@ words. They can override it.
 |------|----------------------|------|
 | A quick, clear task | the request itself | do it |
 | A small change | in chat | build it through the normal workflow |
-| A project with a written design | a written design document | a full plan (for software: superpowers:writing-plans) |
+| A project with a written design | a written design document | a full plan (for software: `writing-plans`) |
 
 If it grows mid-task, stop, say so, and step up a size.
 
@@ -153,15 +148,16 @@ could plan from without going back to your human partner. Cover:
 - the parts of the how they decided, as they decided them
 - what's left to the builder
 
-**Where it goes:** in a software repo,
-`docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, committed.
+**Where it goes:** in a software repository, use the established documentation
+location. If none exists, use
+`docs/specs/YYYY-MM-DD-<topic>-design.md`. Do not commit unless the user or the
+repository workflow calls for a commit.
 Otherwise, ask. Your human partner's preferences override both.
 
-**Builder check:** dispatch a fresh subagent with
-`builder-check-prompt.md` in this directory. When you tell your human
-partner you're writing it up, say a reviewer will read it first and you
-may come back once with a few questions. Don't hand over the document
-until the check is back. Sort what the builder asks into three piles:
+**Builder check:** for substantial or high-risk designs, use
+`builder-check-prompt.md` in this directory with an independent reviewer when
+delegation is available and authorized. Otherwise, perform the check yourself.
+Sort the resulting questions into three piles:
 
 - **Answered already** by the conversation or the project: put the answer
   in the document.
@@ -176,21 +172,11 @@ calls you made so they can check those while reading. That's the only
 round of questions the check produces. Without a subagent tool, read the
 document as that builder yourself.
 
-<HARD-GATE>
-Nothing gets built until your human partner approves the full
-description: in chat for a small change, the document for a project.
-Building includes writing product code, scaffolding, installing
-dependencies, creating projects, and invoking an implementation skill.
-Reading and exploring are fine.
-
-Two exceptions. If they opted out of the questions, the skill is done
-and the gate goes with it. A spike they said yes to may be built; it
-stays labeled throwaway, and keeping what it produced is a new request
-that comes back through this gate.
-
-After a project's document is approved, the next step is the plan. For
-software, invoke superpowers:writing-plans and no other skill.
-</HARD-GATE>
+For a large or consequential project whose behavior is still ambiguous, obtain
+approval of the design before implementation. An explicit, sufficiently detailed
+implementation request already provides that approval; do not manufacture an
+extra gate. After an approved design, use `writing-plans` when a detailed plan
+would materially reduce execution risk.
 
 ## Red Flags
 

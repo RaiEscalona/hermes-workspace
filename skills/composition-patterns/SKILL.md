@@ -29,6 +29,10 @@ Reference these guidelines when:
 - Reviewing component architecture
 - Working with compound components or context providers
 
+Apply these patterns selectively. Preserve established component APIs when a
+rewrite would add churn without reducing complexity, and do not turn every
+small component into a compound-component system.
+
 ## Rule Categories by Priority
 
 | Priority | Category                | Impact | Prefix          |
@@ -66,7 +70,7 @@ Reference these guidelines when:
 
 > **⚠️ React 19+ only.** Skip this section if using React 18 or earlier.
 
-- `react19-no-forwardref` - Don't use `forwardRef`; use `use()` instead of `useContext()`
+- `react19-no-forwardref` - Accept `ref` as a prop for new React 19 components; use `use()` when conditional context reads are useful
 
 ## How to Use
 

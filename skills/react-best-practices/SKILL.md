@@ -20,6 +20,18 @@ Reference these guidelines when:
 - Refactoring existing React/Next.js code
 - Optimizing bundle size or load times
 
+## Project-First Guardrails
+
+- Read the installed React/Next.js versions and local repository instructions;
+  skip rules for unavailable APIs or a different router/runtime.
+- Treat examples using `better-all`, SWR, `lru-cache`, or any other absent
+  package as patterns, not permission to add a dependency. Prefer existing
+  project primitives unless measurement justifies a new dependency.
+- Preserve server/client boundaries, authentication, authorization, caching,
+  and data-residency requirements. Performance never outranks correctness or
+  tenant isolation.
+- Apply high-impact rules first and measure before claiming an improvement.
+
 ## Rule Categories by Priority
 
 | Priority | Category | Impact | Prefix |
@@ -40,7 +52,7 @@ Reference these guidelines when:
 - `async-cheap-condition-before-await` - Check cheap sync conditions before awaiting flags or remote values
 - `async-defer-await` - Move await into branches where actually used
 - `async-parallel` - Use Promise.all() for independent operations
-- `async-dependencies` - Use better-all for partial dependencies
+- `async-dependencies` - Start partially dependent work early, with native promises or an existing helper
 - `async-api-routes` - Start promises early, await late in API routes
 - `async-suspense-boundaries` - Use Suspense to stream content
 
@@ -68,7 +80,7 @@ Reference these guidelines when:
 
 ### 4. Client-Side Data Fetching (MEDIUM-HIGH)
 
-- `client-swr-dedup` - Use SWR for automatic request deduplication
+- `client-swr-dedup` - Deduplicate client requests with the project's existing data layer (SWR when already adopted)
 - `client-event-listeners` - Deduplicate global event listeners
 - `client-passive-event-listeners` - Use passive listeners for scroll
 - `client-localstorage-schema` - Version and minimize localStorage data
