@@ -129,6 +129,11 @@ Reference these guidelines when:
 - `advanced-init-once` - Initialize app once per app load
 - `advanced-use-latest` - useLatest for stable callback refs
 
+## Bundle Verification
+
+- Treat dynamic imports as module boundaries, not export boundaries. Several `next/dynamic` loaders selecting named exports from the same file may share a chunk; inspect the production loadable manifest or bundle analyzer before claiming separate bundles per screen.
+- Distinguish successful code splitting from measured performance gains. Report transferred JavaScript or timing improvements only after a comparable baseline measurement.
+
 ## How to Use
 
 Read individual rule files for detailed explanations and code examples:
